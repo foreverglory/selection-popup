@@ -1,0 +1,35 @@
+{
+  "name": "selection-popup",
+  "version": "1.0.0",
+  "description": "Selection Popup Web",
+  "scripts": {
+    "build": "",
+    "package": "",
+    "start": "web-ext run -s=dist",
+    "dev": "npm start -- --firefox=nightly"
+  },
+  "author": "ForeverGlory <foreverglory@qq.com>",
+  "license": "MIT",
+  "repository": "foreverglory/selection-popup",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "copy-webpack-plugin": "^4.1.1",
+    "css-loader": "^0.28.7",
+    "file-loader": "^1.1.5",
+    "gulp": "^3.9.1",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "source-map-loader": "^0.2.2",
+    "url-loader": "^0.6.2",
+    "vue-loader": "^13.3.0",
+    "vue-style-loader": "^3.0.3",
+    "vue-template-compiler": "^2.5.2",
+    "web-ext": "^2.2.2",
+    "webpack": "^3.7.1",
+    "vue": "^2.5.2",
+    "vuex": "^3.0.0"
+  }
+}
