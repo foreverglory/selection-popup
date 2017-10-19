@@ -56,7 +56,7 @@
     },
     mounted() {
       var vm = this;
-      document.onmouseup = function (event) {
+      document.addEventListener('mouseup', function (event) {
         let selection = window.getSelection();
         let word = selection.toString();
         if (word) {
@@ -92,10 +92,10 @@
           vm.$store.commit('reset');
         }
         vm.word = word;
-      }
-      this.$el.onmouseup = function (event) {
+      });
+      this.$el.addEventListener('mouseup', function (event) {
         event.stopPropagation();
-      };
+      });
     }
   }
 </script>
