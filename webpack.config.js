@@ -36,7 +36,8 @@ var background = {
 
 var content = {
   entry: {
-    content: path.resolve('src', 'content.js')
+    content: path.resolve('src', 'content.js'),
+    options: path.resolve('src', 'options.js')
   },
   output: {
     path: path.resolve('dist'),
@@ -82,6 +83,11 @@ var content = {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
     new CopyWebpackPlugin([
       {
         from: path.resolve('src', 'manifest.json'),
