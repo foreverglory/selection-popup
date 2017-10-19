@@ -6,6 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+import isEmpty from 'lodash/isEmpty';
 import defaultTypes from '../data/types.json';
 
 export default {
@@ -14,6 +15,9 @@ export default {
   },
   getTypes() {
     return browser.storage.local.get("types").then((types) => {
+      if (isEmpty(types)) {
+        return defaultTypes;
+      }
       return defaultTypes.concat(types);
     }).catch(() => {
       return defaultTypes;

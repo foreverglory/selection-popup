@@ -23,7 +23,9 @@
     },
     methods: {
       submit(id) {
-        this.$store.commit('popup', {word: this.word, typeId: id, auto: true});
+        this.$emit('submit', {
+          word: this.word, typeId: id
+        });
       }
     }
   }

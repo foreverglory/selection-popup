@@ -7,29 +7,29 @@
       {{error}}
     </div>
     <div v-else>
-      <ul class="list">
-        <li class="item" v-for="item in items">
-          <div class="title">
-            <a v-bind:href="item.link" target="_blank" v-html="item.title"></a>
-          </div>
-          <div class="content">
-            <img v-if="item.image" v-bind:src="item.image">
-            <div v-html="item.content"></div>
-          </div>
-          <div class="source">
-            <span v-if="item.source">{{item.source}}</span> <span v-if="item.date">{{item.date}}</span>
-          </div>
-        </li>
-      </ul>
-      <div class="copyright"><span></span></div>
+      <renderview v-if="result" v-bind:template="template"></renderview>
     </div>
+    <div class="copyright"><span></span></div>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue';
   export default {
+    components: {
+      renderview: {
+        functional: true,
+        props: ['template'],
+        render(h, context) {
+          return Vue.compile('<div v-if="result">' + context.props.template + '</div>').render.apply(context.parent, arguments);
+        }
+      }
+    },
     computed: {
-      items() {
+      type() {
+        return this.$store.getters.type;
+      },
+      result() {
         return this.$store.state.result;
       },
       loading() {
@@ -42,6 +42,27 @@
         set: function (value) {
           this.$store.state.error = value;
         }
+      },
+      template() {
+        if(this.$store.getters.type && this.$store.getters.type.methed == 'load'){
+          return `
+<ul>
+<li class="item" v-for="item in result">
+    <div class="title">
+      <a v-bind:href="item.link" target="_blank" v-html="item.title"></a>
+    </div>
+    <div class="content">
+      <img v-if="item.image" v-bind:src="item.image"/>
+      <div v-html="item.content"></div>
+    </div>
+    <div class="source">
+      <span v-if="item.source">{{item.source}}</span> <span v-if="item.date">{{item.date}}</span>
+    </div>
+  </li>
+</ul>
+`;
+        }
+        return this.$store.getters.type.template;
       }
     },
     data() {

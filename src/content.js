@@ -26,7 +26,7 @@ browser.runtime.onMessage.addListener((message) => {
     response: "Get it."
   });
 });
-
+Vue.config.productionTip = false;
 new Vue({
   store,
   el: '#selection-popup',
@@ -39,7 +39,7 @@ new Vue({
   },
   created() {
     this.$store.dispatch('init').then(() => {
-      console.log('init');
+
     });
   },
   mounted() {

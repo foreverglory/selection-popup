@@ -3,7 +3,7 @@
   "description": "划词窗",
   "author": "ForeverGlory",
   "homepage_url": "http://foreverglory.me",
-  "version": "1.0.0",
+  "version": "0.0.1",
 
   "manifest_version": 2,
 
@@ -25,7 +25,7 @@
     "notifications",
     "<all_urls>"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; img-src 'self';",
 
   "options_ui": {
     "page": "options.html",

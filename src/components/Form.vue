@@ -13,41 +13,15 @@
     computed: {
       types() {
         return this.$store.state.types;
-      },
-      typeId: {
-        get: function () {
-          return this.$store.state.typeId;
-        },
-        set: function (v) {
-          this.$store.state.typeId = v;
-        }
-      },
-      word: {
-        get: function () {
-          return this.$store.state.word;
-        },
-        set: function (v) {
-          this.$store.state.word = v
-        }
-      },
-      auto: {
-        get: function () {
-          return this.$store.state.auto;
-        },
-        set: function (value) {
-          this.$store.state.auto = value;
-        }
       }
     },
+    props: ['word', 'typeId', 'immediately'],
     data() {
       return {};
     },
-    watch: {
-      auto: function (old) {
-        if (old) {
-          this.submit();
-          this.auto = false;
-        }
+    mounted() {
+      if (this.immediately) {
+        this.submit();
       }
     },
     methods: {
@@ -85,7 +59,6 @@
     }
     button {
       background: url("../images/forward.svg") no-repeat center center;
-/*      background: url("chrome://browser/skin/forward.svg") no-repeat center center;*/
       background-size: auto auto;
       border-radius: 0 3px 3px 0;
       box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);

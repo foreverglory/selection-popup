@@ -2,7 +2,7 @@
   <div id="selection-popup-dialog">
     <div class="wrapper" v-bind:class="direction">
       <div class="dialog-title">划词窗 <small>Selection Popup</small></div>
-      <dialog-form></dialog-form>
+      <dialog-form v-bind:word="word" v-bind:typeId="typeId" v-bind:immediately="immediately"></dialog-form>
       <dialog-result></dialog-result>
     </div>
   </div>
@@ -15,7 +15,7 @@
     components: {
       'dialog-form': Form, 'dialog-result': Result
     },
-    props: ['direction'],
+    props: ['direction', 'word', 'typeId', 'immediately'],
     data() {
       return {
         error: ''

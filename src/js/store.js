@@ -22,9 +22,8 @@ const store = new Vuex.Store({
 
     word: '',
     typeId: '',
-    auto: false,
     error: '',
-    result: []
+    result: null
   },
   getters: {
     type(state) {
@@ -42,18 +41,11 @@ const store = new Vuex.Store({
       state.error = '';
       state.selected = false;
       state.popped = false;
-      state.auto = false;
       state.loading = false;
-      state.result = [];
+      state.result = null;
     },
     selected(state, boolean) {
       state.selected = boolean;
-    },
-    popup(state, {word, typeId, auto = false}){
-      state.popped = true;
-      state.word = word;
-      state.typeId = typeId;
-      state.auto = auto;
     },
     update(state, result) {
       state.result = result;
@@ -63,6 +55,10 @@ const store = new Vuex.Store({
     },
     error(state, error) {
       state.error = error;
+    },
+    record(state, {word, typeId}){
+      state.word = word;
+      state.typeId = typeId;
     }
   },
   actions: {
@@ -72,20 +68,16 @@ const store = new Vuex.Store({
       });
     },
     submit(context, parameters = {}){
+      context.commit('record', parameters);
       let {word, typeId} = parameters;
-      let type = {};
-      for (let item of context.state.types) {
-        if (item.id == typeId) {
-          type = item;
-        }
-      }
+      let type = context.getters.type;
       context.commit('error', '');
       context.commit('loading', true);
       return query(word, type).then((result) => {
         context.commit('loading', false);
         return context.commit('update', result);
       }).catch((error) => {
-        console.log(error);
+        console.log('error', error);
         context.commit('loading', false);
         context.commit('error', error.message);
         throw error;
