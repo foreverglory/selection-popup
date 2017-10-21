@@ -8,6 +8,7 @@
  */
 import Vue from 'vue';
 import Vuex from 'vuex';
+import isEmpty from 'lodash/isEmpty';
 import storage from './storage.js';
 import query from './query.js';
 
@@ -59,13 +60,23 @@ const store = new Vuex.Store({
     record(state, {word, typeId}){
       state.word = word;
       state.typeId = typeId;
+    },
+    updataTypes(state, types) {
+      state.types = types;
     }
   },
   actions: {
-    init(context) {
+    initTypes(context) {
       return storage.getTypes().then((types) => {
-        context.state.types = types;
+        context.commit('updataTypes', types);
+        return types;
       });
+    },
+    init(context) {
+      return Promise.all([
+        context.dispatch('initTypes'),
+        //todo: other init...
+      ]);
     },
     submit(context, parameters = {}){
       context.commit('record', parameters);
@@ -81,6 +92,36 @@ const store = new Vuex.Store({
         context.commit('loading', false);
         context.commit('error', error.message);
         throw error;
+      });
+    },
+    updateType(context, type) {
+      return context.dispatch('initTypes').then((types) => {
+        if (isEmpty(type.id)) {
+          type.id = (Date.now()).toString(36);
+          types.push(type);
+        } else {
+          types = types.from((item) => {
+            if (item.id == type.id) {
+              item = type;
+            }
+            return item;
+          });
+        }
+        return storage.saveTypes(types).then((types) => {
+          context.commit('updataTypes', types);
+          return types;
+        });
+      });
+    },
+    removeType(context, {id}){
+      return context.dispatch('initTypes').then((types) => {
+        types = types.filter((type) => {
+          return type.id != id
+        });
+        return storage.saveTypes(types).then((types) => {
+          context.commit('updataTypes', types);
+          return types;
+        });
       });
     }
   }
