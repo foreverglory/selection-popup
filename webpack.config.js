@@ -59,14 +59,22 @@ var content = {
       },
       {
         test: /\.css/,
-        loader: 'css-loader'
+        loader: ['vue-style-loader', 'css-loader']
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif)(\?.*)?$/,
         loader: 'url-loader',
         query: {
-          limit: 9999999,
+          limit: 1,
           name: 'images/[name].[ext]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        query: {
+          limit: 1,
+          name: 'fonts/[name].[ext]'
         }
       },
       {
@@ -86,6 +94,12 @@ var content = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module, count) {
+        return (module.resource && /\.js$/.test(module.resource) && module.resource.indexOf(path.join(__dirname, 'node_modules')) === 0);
       }
     }),
     new CopyWebpackPlugin([

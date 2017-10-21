@@ -3,7 +3,7 @@
   "description": "划词窗，划词搜索、划词翻译等操作",
   "author": "ForeverGlory",
   "homepage_url": "http://foreverglory.me",
-  "version": "0.0.1",
+  "version": "0.0.2",
 
   "manifest_version": 2,
 
@@ -25,11 +25,11 @@
     "notifications",
     "<all_urls>"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; img-src 'self';",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; img-src 'self' http: https:;",
 
   "options_ui": {
     "page": "options.html",
-    "open_in_tab": false
+    "open_in_tab": true
   },
 
   "background": {
@@ -38,7 +38,7 @@
   "content_scripts": [{
       "all_frames": true,
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["vendor.js", "content.js"]
     }],
 
   "applications": {
