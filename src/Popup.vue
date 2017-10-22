@@ -59,7 +59,7 @@
       document.addEventListener('mouseup', function (event) {
         let selection = window.getSelection();
         let word = selection.toString();
-        if (word) {
+        if (word && event.which === 1) {
           vm.selected = true;
 
           var boxHeight = 400, boxWidth = 300;
