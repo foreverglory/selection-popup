@@ -7,7 +7,15 @@
  * file that was distributed with this source code.
  */
 import Vue from 'vue';
+import mixins from './js/mixins';
+import * as filters from './js/filters';
 import store from './js/store.js';
+
+Vue.mixin(mixins);
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+});
+
 import Popup from './Popup.vue';
 
 browser.runtime.onMessage.addListener((message) => {

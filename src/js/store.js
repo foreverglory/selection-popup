@@ -28,11 +28,9 @@ const store = new Vuex.Store({
   },
   getters: {
     type(state) {
-      for (let type of state.types) {
-        if (type.id == state.typeId) {
-          return type;
-        }
-      }
+      return state.types.find((type) => {
+        return type.id == state.typeId;
+      });
     }
   },
   mutations: {
@@ -57,12 +55,22 @@ const store = new Vuex.Store({
     error(state, error) {
       state.error = error;
     },
-    record(state, {word, typeId}){
-      state.word = word;
-      state.typeId = typeId;
-    },
     updataTypes(state, types) {
       state.types = types;
+    },
+    startSubmit(state, {word, typeId}) {
+      state.word = word.trim();
+      state.typeId = typeId;
+      state.error = null;
+      state.loading = true;
+    },
+    stopSubmit(state, {word, typeId, error, result}) {
+      if (error) {
+        state.error = error;
+      } else {
+        state.result = result;
+      }
+      state.loading = false;
     }
   },
   actions: {
@@ -79,18 +87,14 @@ const store = new Vuex.Store({
       ]);
     },
     submit(context, parameters = {}){
-      context.commit('record', parameters);
       let {word, typeId} = parameters;
+      context.commit('startSubmit', {word, typeId});
       let type = context.getters.type;
-      context.commit('error', '');
-      context.commit('loading', true);
       return query(word, type).then((result) => {
-        context.commit('loading', false);
+        context.commit('stopSubmit', {word, typeId, result});
         return context.commit('update', result);
       }).catch((error) => {
-        console.log('error', error);
-        context.commit('loading', false);
-        context.commit('error', error.message);
+        context.commit('stopSubmit', {word, typeId, error});
         throw error;
       });
     },
@@ -100,7 +104,7 @@ const store = new Vuex.Store({
           type.id = (Date.now()).toString(36);
           types.push(type);
         } else {
-          types = types.from((item) => {
+          types = types.map((item) => {
             if (item.id == type.id) {
               item = type;
             }

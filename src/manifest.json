@@ -1,9 +1,9 @@
 {
   "name": "Selection Popup",
-  "description": "划词窗，划词搜索、划词翻译等操作",
+  "description": "划词窗，划词搜索、划词翻译、划词工具等等，只需要轻轻一划，就能得到你想要的。",
   "author": "ForeverGlory",
   "homepage_url": "http://foreverglory.me",
-  "version": "0.0.2",
+  "version": "0.1.0",
 
   "manifest_version": 2,
 
@@ -29,7 +29,8 @@
 
   "options_ui": {
     "page": "options.html",
-    "open_in_tab": true
+    "open_in_tab": false,
+    "browser_style": false
   },
 
   "background": {

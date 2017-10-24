@@ -70,7 +70,11 @@ var content = {
         }
       },
       {
-        test: /\.(woff2?|eot|ttf|otf|svg)(\?.*)?$/,
+        test: /\.svg(\?.*)?$/,
+        loader: 'url-loader'
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         query: {
           limit: 1,
