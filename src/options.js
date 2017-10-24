@@ -7,37 +7,50 @@
  * file that was distributed with this source code.
  */
 import Vue from 'vue';
+import iView from 'iview';
+import 'iview/dist/styles/iview.css';
+
+import mixins from './js/mixins';
+import * as filters from './js/filters';
+import store from './js/store';
+
+Vue.mixin(mixins);
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+});
+Vue.use(iView);
+
+import Setting from './components/Setting.vue';
 
 var Layout = Vue.extend({
   template: `
   <div>
-    <p>通过划词，实现立即进行搜索、翻译等功能</p>
-    <p>目前仅支持<em>百度搜索</em>、<em>必应搜索</em>、<em>金山词霸</em>及<em>MDN查询</em></p>
-    <p></p>
-    <p>后期将逐步实现可配置，更人性化的划词操作。</p>
-    <p></p>
+    <setting></setting>
     <p></p>
     <p>意见反馈：<a href="https://github.com/foreverglory/selection-popup/issues" target="_blank">提供划词工具，功能BUG反馈</a></p>
     <p>源码地址：<a href="https://github.com/foreverglory/selection-popup" target="_blank">https://github.com/foreverglory/selection-popup</a></p>
   </div>
 `,
+  components: {Setting},
   data() {
-    return {
+    return { 
       storage: {}
     }
   },
   methods: {
-    clear() {
-      browser.storage.local.clear().then(() => {
-        //todo: clear storage
-      });
-    }
+
   }
 });
 
 new Vue({
+  store,
   el: '#root',
   template: '<Layout/>',
   components: {Layout},
+  created() {
+    this.$store.dispatch('init').then(() => {
+
+    });
+  },
 });
 
