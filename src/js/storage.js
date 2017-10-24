@@ -6,47 +6,30 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-import isEmpty from 'lodash/isEmpty';
+import _ from 'lodash';
 import defaultTypes from '../data/types.json';
 
 export default {
-  getType(name) {
-
-  },
   getTypes() {
-    return browser.storage.local.get("types").then((types) => {
-      if (isEmpty(types)) {
-        return defaultTypes;
+    return browser.storage.local.get('types').then((items) => {
+      if (_.has(items, 'types')) {
+        return items['types'];
+      } else {
+        return [];
       }
-      return defaultTypes.concat(types);
     }).catch(() => {
-      return defaultTypes;
+      return [];
     });
-  },
-  addType(type) {
-
-  },
-  updateType(type) {
-    return this.getTypes().then((types) => {
-      types = Array.from(types, (item) => {
-        if (item.id == type.id) {
-          item = type;
-        }
-        return item;
-      });
-      return this.saveTypes(types);
-    });
-  },
-  delType(name) {
-
   },
   saveTypes(types) {
-    return brower.storage.local.set({
+    return browser.storage.local.set({
       types: types
     }).then(() => {
-      brower.storage.sync.set({
-        types: types
-      });
+//      todo: sync
+//      browser.storage.sync.set({
+//        types: types
+//      });
+      return this.getTypes();
     });
   }
 };
