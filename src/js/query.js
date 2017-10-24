@@ -6,30 +6,86 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+import _ from 'lodash';
+import URI from 'urijs';
+
+function replaceWord(data, word) {
+  switch (typeof data) {
+    case 'string':
+      data = data.replace('{word}', word);
+      break;
+    case 'object':
+      if (Array.isArray(data)) {
+        data = data.map((item) => {
+          return replaceWord(item, word);
+        });
+      } else {
+        let newData = {};
+        for (let [key, value] of Object.entries(data)) {
+          newData[key] = replaceWord(value, word);
+        }
+        data = newData;
+      }
+      break;
+  }
+  return data;
+}
+
 function query(word, type) {
-  let options = type.options;
-  switch (type.methed) {
-    case 'load':
-      return fetch(type.uri.replace('{word}', word)).then((response) => {
+  var contentTypes = {
+    json: 'application/json',
+    jsonp: 'application/jsonp',
+    xml: 'text/xml'
+  };
+
+  let input = replaceWord(type.request.uri, word);
+  let headers = new Headers(replaceWord(type.request.headers, word));
+  if (!headers.has('Content-Type') && _.has(contentTypes, type.response.type)) {
+    headers.append('Content-Type', contentTypes[type.response.type]);
+  }
+  let method = type.request.method.toUpperCase();
+  let init = {
+    method: method,
+    headers: headers,
+    cache: 'default'
+  }
+  if (method === 'GET') {
+    input = URI(input).addQuery(replaceWord(type.request.data, word)).href();
+  } else {
+    init.body = JSON.stringify(replaceWord(type.request.data, word))
+  }
+  let request = new Request(input, init);
+  switch (type.response.type) {
+    case 'json':
+      return fetch(request).then((response) => {
+        return response.json();
+      }).then((json) => {
+        console.debug('response', 'json', json);
+        return json;
+      });
+    case 'xml':
+    default:
+      return fetch(request).then((response) => {
         return response.text();
       }).then((html) => {
+        var mappings = type.response.mappings;
         var doc = new DOMParser().parseFromString(html, 'text/html');
         var result = [];
-        doc.querySelectorAll(options.container).forEach((node) => {
+        doc.querySelectorAll(mappings.container).forEach((node) => {
           try {
             var item = {
-              title: node.querySelector(options.query.title).innerText,
-              content: node.querySelector(options.query.content).innerHTML
+              title: node.querySelector(mappings.title).innerText,
+              content: node.querySelector(mappings.content).innerHTML
             }
-            let link = options.query.link ? node.querySelector(options.query.link) : null;
+            let link = mappings.link ? node.querySelector(mappings.link) : null;
             if (link && link.nodeName == 'A') {
               item.link = link.href;
             }
-            let image = options.query.image ? node.querySelector(options.query.image) : null;
+            let image = mappings.image ? node.querySelector(mappings.image) : null;
             if (image && image.nodeName == 'IMG') {
               item.image = image.src;
             }
-            let source = options.query.source ? node.querySelector(options.query.source) : null;
+            let source = mappings.source ? node.querySelector(mappings.source) : null;
             if (source) {
               item.source = source.innerText;
             }
@@ -40,19 +96,6 @@ function query(word, type) {
         });
         return result;
       });
-      break;
-    case 'json':
-      return fetch(type.uri.replace('{word}', word)).then((response) => {
-        return response.json();
-      }).catch((error) => {
-        console.log(error);
-      });
-      break;
-    case 'xml':
-      //todo: api xml
-      break;
-    default:
   }
-  return 
 }
 export default query;

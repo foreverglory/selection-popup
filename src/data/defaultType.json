@@ -1,0 +1,14 @@
+{
+    "name": "",
+    "icon": "",
+    "request": {
+        "uri": "",
+        "method": "GET",
+        "data": {},
+        "headers": {}
+    },
+    "response": {
+        "type": "html",
+        "mappings": {}
+    }
+}

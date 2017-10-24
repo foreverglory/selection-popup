@@ -1,10 +1,10 @@
 <template>
   <div id="selection-popup-dialog-result">
     <div id="loading" v-if="loading">
-      <img src="../images/loading.gif" />
+      <img v-bind:src="'images/loading.gif'|resource" />
     </div>
     <div id="error" v-else-if="error">
-      {{error}}
+      {{error.message()}}
     </div>
     <div v-else>
       <renderview v-if="result" v-bind:template="template"></renderview>
@@ -44,7 +44,7 @@
         }
       },
       template() {
-        if(this.$store.getters.type && this.$store.getters.type.methed == 'load'){
+        if (this.$store.getters.type && this.$store.getters.type.response.type == 'html') {
           return `
 <ul>
 <li class="item" v-for="item in result">
@@ -62,7 +62,7 @@
 </ul>
 `;
         }
-        return this.$store.getters.type.template;
+        return this.$store.getters.type.response.template;
       }
     },
     data() {
@@ -131,6 +131,9 @@
       img{
         width: 100px; height: 100px; margin: 50px auto; display: block;
       }
+    }
+    #error{
+      color: #d00;
     }
     .copyright{
       font-size: 11px; color: #666; text-align: center;
