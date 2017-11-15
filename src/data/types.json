@@ -1,86 +1,105 @@
 [{
-    "id": "www.baidu.com",
-    "name": "百度搜索",
-    "icon": "https://www.baidu.com/img/baidu.svg",
-    "request": {
-      "uri": "https://www.baidu.com/s",
-      "method": "GET",
-      "data": {
-        "ie": "utf-8",
-        "wd": "{word}"
-      },
-      "headers": {}
+  "id": "www.baidu.com",
+  "name": "百度搜索",
+  "icon": "https://www.baidu.com/img/baidu.svg",
+  "request": {
+    "uri": "https://www.baidu.com/s",
+    "method": "GET",
+    "data": {
+      "ie": "utf-8",
+      "wd": "{word}"
     },
-    "response": {
-      "type": "html",
-      "mappings": {
-        "container": "#content_left .c-container",
-        "title": ".t",
-        "link": ".t a",
-        "image": ".c-row .c-img",
-        "content": ".c-abstract",
-        "source": ".c-showurl"
-      }
+    "headers": {}
+  },
+  "response": {
+    "type": "html",
+    "mappings": {
+      "container": "#content_left .c-container",
+      "title": ".t",
+      "link": ".t a",
+      "image": ".c-row .c-img",
+      "content": ".c-abstract",
+      "source": ".c-showurl"
     },
-    "source": "system"
-  }, {
-    "id": "www.bing.com",
-    "name": "必应搜索",
-    "icon": "https://www.bing.com/sa/simg/bing_p_rr_teal_min.ico",
-    "request": {
-      "uri": "https://www.bing.com/search?q={word}",
-      "method": "GET",
-      "data": {},
-      "headers": {}
+    "template": ""
+  },
+  "source": "system"
+}, {
+  "id": "www.bing.com",
+  "name": "必应搜索",
+  "icon": "https://www.bing.com/sa/simg/bing_p_rr_teal_min.ico",
+  "request": {
+    "uri": "https://www.bing.com/search?q={word}",
+    "method": "GET",
+    "data": {},
+    "headers": {}
+  },
+  "response": {
+    "type": "html",
+    "mappings": {
+      "container": "#b_results .b_algo",
+      "title": "h2 a",
+      "link": "h2 a",
+      "image": "",
+      "content": ".b_caption p",
+      "source": ".b_attribution cite"
     },
-    "response": {
-      "type": "html",
-      "mappings": {
-        "container": "#b_results .b_algo",
-        "title": "h2 a",
-        "link": "h2 a",
-        "image": "",
-        "content": ".b_caption p",
-        "source": ".b_attribution cite"
-      }
+    "template": ""
+  },
+  "source": "system"
+}, {
+  "id": "www.iciba.com",
+  "name": "金山词霸",
+  "icon": "http://www.iciba.com/favicon.ico",
+  "request": {
+    "uri": "https://dict-co.iciba.com/api/dictionary.php?w={word}&type=json&key=74806BF56A907DCFCE164EDB2F6DDAB9",
+    "method": "GET",
+    "data": {},
+    "headers": {}
+  },
+  "response": {
+    "type": "json",
+    "mappings": {},
+    "template": "<h3>{{result.word_name}}</h3><p v-for='item in result.symbols[0].parts'><em>{{item.part}}</em> <span v-for='mean in item.means'>{{mean}}; </span></p>"
+  },
+  "source": "system"
+}, {
+  "id": "mdn",
+  "name": "MDN web docs",
+  "icon": "https://cdn.mdn.mozilla.net/static/img/favicon32-local.329e8131018f.png",
+  "request": {
+    "uri": "https://developer.mozilla.org/zh-CN/search?q={word}&topic=js&topic=api&topic=webdev&topic=http&topic=webext",
+    "method": "GET",
+    "data": {},
+    "headers": {}
+  },
+  "response": {
+    "type": "html",
+    "mappings": {
+      "container": ".result-list>li",
+      "title": ".result-list-item h4",
+      "link": ".result-list-item h4 a",
+      "image": "",
+      "content": ".result-list-item p",
+      "source": ".search-meta"
     },
-    "source": "system"
-  }, {
-    "id": "www.iciba.com",
-    "name": "金山词霸",
-    "icon": "http://www.iciba.com/favicon.ico",
-    "request": {
-      "uri": "https://dict-co.iciba.com/api/dictionary.php?w={word}&type=json&key=74806BF56A907DCFCE164EDB2F6DDAB9",
-      "method": "GET",
-      "data": {},
-      "headers": {}
-    },
-    "response": {
-      "type": "json",
-      "mappings": {},
-      "template": "<h3>{{result.word_name}}</h3><p v-for='item in result.symbols[0].parts'><em>{{item.part}}</em> <span v-for='mean in item.means'>{{mean}}; </span></p>"
-    },
-    "source": "system"
-  }, {
-    "id": "mdn",
-    "name": "MDN web docs",
-    "icon": "https://cdn.mdn.mozilla.net/static/img/favicon32-local.329e8131018f.png",
-    "request": {
-      "uri": "https://developer.mozilla.org/zh-CN/search?q={word}&topic=js&topic=api&topic=webdev&topic=http&topic=webext",
-      "method": "GET",
-      "data": {},
-      "headers": {}
-    },
-    "response": {
-      "type": "html",
-      "mappings": {
-        "container": ".result-list>li",
-        "title": ".result-list-item h4",
-        "link": ".result-list-item h4 a",
-        "image": "",
-        "content": ".result-list-item p",
-        "source": ".search-meta"
-      }
-    },
-    "source": "system"
-  }]
+    "template": ""
+  },
+  "source": "system"
+}, {
+  "id": "github",
+  "name": "Github",
+  "icon": "https://github.com/favicon.ico",
+  "request": {
+    "uri": "https://api.github.com/search/repositories?q={word}",
+    "method": "GET",
+    "data": {},
+    "headers": {}
+  },
+  "response": {
+    "type": "json",
+    "mappings": {},
+    "template": "<ul><li v-for='item in result.items'><h4><a href='{{item.html_url}}' target='_blank'>{{item.full_name}}</a></h4><p>{{item.description}}</p></li></ul>"
+  },
+  "source": "system"
+}]
