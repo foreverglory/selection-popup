@@ -9,10 +9,22 @@
 import defaultTypes from './data/types.json';
 import storage from './js/storage.js';
 
-function notify(message) {
-
-}
-chrome.runtime.onMessage.addListener(notify);
+chrome.runtime.onMessage.addListener(({
+  method,
+  data
+}) => {
+  switch (method) {
+    case 'getStorage':
+      chrome.storage.local.get(data).then((items) => {
+        return items;
+      });
+      break;
+    case 'setStorage':
+      chrome.storage.local.set(data);
+      break;
+    default:
+  }
+});
 
 chrome.runtime.onInstalled.addListener((details) => {
   switch (details.reason) {

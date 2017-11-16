@@ -15,6 +15,8 @@ import query from './query.js';
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
+    init: false,
+    activate: {},
     types: [],
     selected: false,
     popped: false,
@@ -55,16 +57,27 @@ const store = new Vuex.Store({
     error(state, error) {
       state.error = error;
     },
+    updateActivate(state, activate) {
+      state.activate = activate;
+    },
     updataTypes(state, types) {
       state.types = types;
     },
-    startSubmit(state, {word, typeId}) {
+    startSubmit(state, {
+      word,
+      typeId
+    }) {
       state.word = word.trim();
       state.typeId = typeId;
       state.error = null;
       state.loading = true;
     },
-    stopSubmit(state, {word, typeId, error, result}) {
+    stopSubmit(state, {
+      word,
+      typeId,
+      error,
+      result
+    }) {
       if (error) {
         state.error = error;
       } else {
@@ -74,6 +87,12 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    initActivate(context) {
+      return storage.getActivate().then((activate) => {
+        context.commit('updateActivate', activate);
+        return activate;
+      });
+    },
     initTypes(context) {
       return storage.getTypes().then((types) => {
         context.commit('updataTypes', types);
@@ -82,21 +101,41 @@ const store = new Vuex.Store({
     },
     init(context) {
       return Promise.all([
+        context.dispatch('initActivate'),
         context.dispatch('initTypes'),
         //todo: other init...
-      ]);
+      ]).then(() => {
+        context.state.init = true;
+      });
     },
-    submit(context, parameters = {}){
-      let {word, typeId} = parameters;
-      context.commit('startSubmit', {word, typeId});
+    submit(context, parameters = {}) {
+      let {
+        word,
+        typeId
+      } = parameters;
+      context.commit('startSubmit', {
+        word,
+        typeId
+      });
       let type = context.getters.type;
       return query(word, type).then((result) => {
-        context.commit('stopSubmit', {word, typeId, result});
+        context.commit('stopSubmit', {
+          word,
+          typeId,
+          result
+        });
         return context.commit('update', result);
       }).catch((error) => {
-        context.commit('stopSubmit', {word, typeId, error});
+        context.commit('stopSubmit', {
+          word,
+          typeId,
+          error
+        });
         throw error;
       });
+    },
+    updateActivate(context, activate) {
+      return storage.setActivate(activate);
     },
     updateType(context, type) {
       return context.dispatch('initTypes').then((types) => {
@@ -117,7 +156,9 @@ const store = new Vuex.Store({
         });
       });
     },
-    removeType(context, {id}){
+    removeType(context, {
+      id
+    }) {
       return context.dispatch('initTypes').then((types) => {
         types = types.filter((type) => {
           return type.id != id
