@@ -10,6 +10,7 @@
 var webpack = require('webpack');
 var path = require('path');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var GenerateAssetPlugin = require('generate-asset-webpack-plugin');
 
 var background = {
   entry: {
@@ -27,10 +28,10 @@ var background = {
   },
   module: {
     rules: [{
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
-      }]
+      test: /\.js$/,
+      loader: 'babel-loader',
+      exclude: /node_modules/
+    }]
   }
 };
 
@@ -51,8 +52,7 @@ var content = {
     }
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
@@ -82,6 +82,10 @@ var content = {
         }
       },
       {
+        test: /\.(html|htm)(\?.*)?$/,
+        loader: 'html-loader'
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -97,7 +101,19 @@ var content = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"production"'
+        NODE_ENV: '`production`'
+      }
+    }),
+    new GenerateAssetPlugin({
+      filename: 'manifest.json',
+      fn: (compilation, cb) => {
+        let package = require(path.resolve('package.json'));
+        let manifest = require(path.resolve('src', 'manifest.json'));
+        manifest.version = package.version;
+        if (process.env.npm_config_webext == 'chrome') {
+          delete manifest.applications;
+        }
+        cb(null, JSON.stringify(manifest, null, 2));
       }
     }),
     new webpack.optimize.CommonsChunkPlugin({
@@ -108,14 +124,7 @@ var content = {
     }),
     new CopyWebpackPlugin([
       {
-        from: path.resolve('src', 'manifest.json'),
-        to: path.resolve('dist'),
-        ignore: ['.*']
-      },
-      {
-        from: path.resolve('src', 'options.html'),
-        to: path.resolve('dist'),
-        ignore: ['.*']
+        from: path.resolve('src', 'options.html')
       },
       {
         from: path.resolve('src', 'icons'),
@@ -124,9 +133,11 @@ var content = {
       {
         from: path.resolve('src', 'images'),
         to: path.resolve('dist', 'images')
-      }])
+      }
+    ])
   ]
 };
 
-module.exports = [background, content];
-
+module.exports = function(env = ''){
+  return [background, content];
+}

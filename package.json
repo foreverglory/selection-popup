@@ -1,6 +1,6 @@
 {
   "name": "selection-popup",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Selection Popup Web",
   "scripts": {
     "build": "webpack",
@@ -23,7 +23,9 @@
     "copy-webpack-plugin": "^4.1.1",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.5",
+    "generate-asset-webpack-plugin": "^0.3.0",
     "gulp": "^3.9.1",
+    "html-loader": "^0.5.1",
     "iview": "^2.5.1",
     "lodash": "^4.17.4",
     "node-sass": "^4.5.3",
