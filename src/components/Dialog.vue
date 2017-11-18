@@ -51,7 +51,7 @@
       &.right{
         left: 0;
       }
-
+      min-width: 300px;
       max-width: 300px;
       max-height: 400px;
       overflow: hidden;

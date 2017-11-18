@@ -54,7 +54,8 @@
       /* border-radius: 3px; */
       box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.1);
       color: inherit;
-      padding: 0 10px;
+      padding: 0 5px;
+      padding-right: 30px;
       font-size: 15px;
     }
     button {
