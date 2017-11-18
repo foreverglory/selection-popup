@@ -1,0 +1,53 @@
+{
+  "name": "Selection Popup",
+  "description": "划词窗，划词搜索、划词翻译、划词工具等等，只需要轻轻一划，就能得到你想要的。",
+  "author": "ForeverGlory",
+  "homepage_url": "http://foreverglory.me",
+  "version": "0.2.0",
+  "manifest_version": 2,
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "64": "icons/icon-64.png",
+    "128": "icons/icon-128.png"
+  },
+  "web_accessible_resources": [
+    "images/loading.gif",
+    "images/forward.svg"
+  ],
+  "permissions": [
+    "storage",
+    "alarms",
+    "webRequest",
+    "notifications",
+    "<all_urls>"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; img-src 'self' http: https:;",
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false,
+    "browser_style": false
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "vendor.js",
+        "content.js"
+      ]
+    }
+  ],
+  "applications": {
+    "gecko": {
+      "id": "selection-popup@foreverglory.me"
+    }
+  }
+}
