@@ -3,7 +3,8 @@
   "version": "0.2.0",
   "description": "Selection Popup Web",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack -p",
+    "clean": "gulp clean",
     "start": "web-ext run -s dist",
     "package": "web-ext build -s dist -a artifacts",
     "watch": "webpack --watch",
@@ -29,6 +30,7 @@
     "iview": "^2.5.1",
     "lodash": "^4.17.4",
     "node-sass": "^4.5.3",
+    "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "source-map-loader": "^0.2.2",
     "url-loader": "^0.6.2",
