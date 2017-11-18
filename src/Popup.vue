@@ -1,14 +1,7 @@
 <template>
   <div id="selection-popup">
     <selection-popup-icon v-if="selected && !popped" v-bind:style="style" v-bind:direction="direction" v-bind:word="word" v-on:submit="onSubmit"></selection-popup-icon>
-    <selection-popup-dialog 
-      v-if="popped" 
-      v-bind:style="style"
-      v-bind:direction="direction" 
-      v-bind:word="word"
-      v-bind:typeId="typeId"
-      v-bind:immediately="immediately"
-      >
+    <selection-popup-dialog v-if="popped" v-bind:style="style" v-bind:direction="direction" v-bind:word="word" v-bind:typeId="typeId" v-bind:immediately="immediately">
     </selection-popup-dialog>
   </div>
 </template>
@@ -71,7 +64,23 @@ export default {
           selectionEvent = "activated";
         }
         document.addEventListener("mouseup", function(event) {
-          if (selectionEvent == "activated" && event.which == mouse) {
+          if (
+            selectionEvent == "activated" &&
+            event.which == mouse &&
+            Array.indexOf(
+              [
+                "IMG",
+                "AUDIO",
+                "VIDEO",
+                "OBJECT",
+                "CANVAS",
+                "BUTTON",
+                "SELECT",
+                "FRAME"
+              ],
+              event.target.nodeName
+            ) === -1
+          ) {
             vm.onSelection(event);
           } else {
             vm.$store.commit("reset");

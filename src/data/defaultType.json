@@ -9,6 +9,7 @@
     },
     "response": {
         "type": "html",
-        "mappings": {}
+        "mappings": {},
+        "template": ""
     }
 }

@@ -50,30 +50,33 @@
             <Card dis-hover v-if="form.response.type == 'html'">
               <p slot="title">映射</p>
               <div>
-                <FormItem label="区域">
+                <FormItem label="区域"  v-bind:label-width="120">
                   <Input v-model="form.response.mappings.container" placeholder="请输入元素"></Input>
                 </FormItem>
-                <FormItem label="标题">
+                <FormItem label="标题 (result.list[].title)" v-bind:label-width="120">
                   <Input v-model="form.response.mappings.title" placeholder="请输入元素"></Input>
                 </FormItem>
-                <FormItem label="链接">
+                <FormItem label="链接 (result.list[].link)" v-bind:label-width="120">
                   <Input v-model="form.response.mappings.link" placeholder="请输入元素"></Input>
                 </FormItem>
-                <FormItem label="图片">
+                <FormItem label="图片 (result.list[].image)" v-bind:label-width="120">
                   <Input v-model="form.response.mappings.image" placeholder="请输入元素"></Input>
                 </FormItem>
-                <FormItem label="内容">
+                <FormItem label="内容 (result.list[].content)" v-bind:label-width="120">
                   <Input v-model="form.response.mappings.content" placeholder="请输入元素"></Input>
                 </FormItem>
-                <FormItem label="来源">
+                <FormItem label="来源 (result.list[].source)" v-bind:label-width="120">
                   <Input v-model="form.response.mappings.source" placeholder="请输入元素"></Input>
                 </FormItem>
               </div>
             </Card>
-            <Card dis-hover v-if="form.response.type != 'html'">
+            <Card dis-hover>
               <p slot="title">模板</p>
               <div>
                 <Input v-model="form.response.template" type="textarea" v-bind:rows="10"></Input>
+                <p></p>
+                <p>示例模板：</p>
+                <pre>{{template}}</pre>
                 <p></p>
                 <p>模板使用 vue 语法：<a href="https://cn.vuejs.org/v2/guide/syntax.html" target="_blank">模板语法</a></p>
                 <p>
@@ -99,6 +102,7 @@
 <script>
   import _ from 'lodash';
   import isEmpty from "lodash/isEmpty";
+  import template from '../data/template.html';
   export default {
     components: {},
     props: {
@@ -137,7 +141,8 @@
         ruleValidate: {
           name: [{required: true, message: "名称不能为空", trigger: "blur"}],
           icon: [{required: true, message: "图标不能为空", trigger: "blur"}]
-        }
+        },
+        template: template
       };
     },
     methods: {

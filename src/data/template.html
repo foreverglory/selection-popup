@@ -1,0 +1,12 @@
+<ul>
+  <li v-for="item in result">
+    <h4>
+      <a v-bind:href="item.link" target="_blank">{{item.title}}</a>
+    </h4>
+    <div>
+      <img v-if="item.image" v-bind:src="item.image" />
+      <p v-html="item.content"></p>
+    </div>
+    <address v-if="item.source">{{item.source}}</address>
+  </li>
+</ul>
