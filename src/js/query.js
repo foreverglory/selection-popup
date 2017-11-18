@@ -79,7 +79,7 @@ function query(word, type) {
             }
             let link = mappings.link ? node.querySelector(mappings.link) : null;
             if (link && link.nodeName == 'A') {
-              item.link = link.href;
+              item.link = URI(link.href).absoluteTo(input);
             }
             let image = mappings.image ? node.querySelector(mappings.image) : null;
             if (image && image.nodeName == 'IMG') {
