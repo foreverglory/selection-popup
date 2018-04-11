@@ -100,6 +100,7 @@ var content = {
   },
   plugins: [
     new webpack.DefinePlugin({
+      'platform': '`firefox`',
       'process.env': {
         NODE_ENV: '`production`'
       }
